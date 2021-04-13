@@ -121,7 +121,7 @@ class Dataset():
             self.n_classes = 10
             self.label_mapping = list(range(self.n_classes))
             self.label_augment = LabelAugmentor(self.label_mapping)
-            data_dir = 'mnist_data'
+            data_dir = '/home/kaushikdas/aashish/pytorch_datasets/MNIST'
 
             self.test_data = torchvision.datasets.MNIST(data_dir, train=False, download=True,
                                                    transform=T.Compose([T.ToTensor(), self.test_augmentor]),
