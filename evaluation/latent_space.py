@@ -46,7 +46,7 @@ def show_real_data(model, data, y, T=0.75):
             if yk == yi:
                 xk = data.de_augment(xk.unsqueeze(0)).squeeze().numpy()
                 xk = np.clip(xk, 0, 1)
-                xk = xk.transpose(1, 2, 0)
+                # xk = xk.transpose(1, 2, 0)
                 plotted_imgs.append(xk)
                 all_imgs.pop(k)
                 break

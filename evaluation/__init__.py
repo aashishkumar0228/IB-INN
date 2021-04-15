@@ -113,9 +113,9 @@ def test(args):
     eval_ood_detection     = False and eval(args['evaluation']['ood'])
     # I put these in the config at first, but they don't really take that long:
     eval_sample_generation = True
-    eval_calibration       = False
-    eval_test_acc          = False
-    eval_latent_pca_plot   = False
+    eval_calibration       = True
+    eval_test_acc          = True
+    eval_latent_pca_plot   = True
 
 
     print('>> Plotting loss curves')
@@ -210,6 +210,8 @@ def test(args):
                                      'ice': float(100. * ice),
                                      'oce': float(ovc),
                                      'gme': float(100. * (ece*mce*ice)**0.333333333)}
+    
+    print(results_dict)
 
     if not vib_model and not inn.feed_forward:
         if eval_sample_generation:
