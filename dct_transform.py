@@ -69,9 +69,9 @@ class DCTPooling2d(nn.Module):
         self.rebalance = 2 * (self.N +1) / rebalance
         self.jac = (self.N**2 * self.ch) * np.log(rebalance)
 
-        # assert torch.cuda.is_available(), "please father, give 1 cuda"
-        # I = torch.eye(self.N).cuda()
-        I = torch.eye(self.N)
+        assert torch.cuda.is_available(), "please father, give 1 cuda"
+        I = torch.eye(self.N).cuda()
+        # I = torch.eye(self.N)
 
         self.weight = dct_1d(I).t()
         self.inv_weight = idct_1d(I).t()
