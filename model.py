@@ -21,11 +21,17 @@ class GenerativeClassifier(nn.Module):
         self.feed_forward        = eval(self.args['ablations']['feed_forward_resnet'])
         self.feed_forward_revnet = eval(self.args['ablations']['feed_forward_irevnet'])
 
+        self.handwriting_type = 'None'
+        if args['data'].get('handwriting_type'):
+            self.handwriting_type = args['data']['handwriting_type']
+
         if self.dataset == 'MNIST':
             self.dims  = (28, 28)
             self.input_channels = 1
             self.ndim_tot = int(np.prod(self.dims))
             self.n_classes = 10
+            if self.handwriting_type == 'OPERATOR':
+                self.n_classes = 12
         elif self.dataset in ['CIFAR10', 'CIFAR100']:
             self.dims  = (3 + self.ch_pad, 32, 32)
             self.input_channels = 3 + self.ch_pad

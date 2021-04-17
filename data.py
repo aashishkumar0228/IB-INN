@@ -8,6 +8,7 @@ import torch
 from torch.utils.data import DataLoader
 import torchvision.transforms as T
 import torchvision.datasets
+import pandas as pd
 
 class StandardTransform(object):
     def __init__(self, transform=None, target_transform=None):
@@ -89,6 +90,27 @@ class Augmentor():
         else:
             return x / self.gamma.to(x.device) + self.beta.to(x.device)
 
+class HandwritingDataset(torch.utils.data.Dataset):
+    def __init__(self, csv_path, transform = None, target_transform = None):
+        self.df = pd.read_csv(csv_path, header = None)
+        self.transform = transform
+        self.target_transform = target_transform
+        self.x = np.asarray(self.df.iloc[:len(self.df),1:]).reshape([len(self.df),28,28,1]) # taking all columns expect column 0
+        self.x = self.x.astype('uint8')
+        self.y = np.asarray(self.df.iloc[:len(self.df),0]).reshape([len(self.df)]) # taking column 0
+
+    def __len__(self):
+        return len(self.df)
+    
+    def __getitem__(self, index):
+        target = self.y[index]
+        image = self.x[index]
+        if self.transform is not None:
+            image = self.transform(image)
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+        return image, target
+
 class Dataset():
 
     def __init__(self, args):
@@ -102,6 +124,10 @@ class Dataset():
         channel_pad       = eval(args['data']['pad_noise_channels'])
         channel_pad_sigma = eval(args['data']['pad_noise_std'])
 
+        self.handwriting_type = 'None'
+        if args['data'].get('handwriting_type'):
+            self.handwriting_type = args['data']['handwriting_type']
+
         if self.dataset == 'MNIST':
             beta = 0.5
             gamma = 2.
@@ -113,7 +139,26 @@ class Dataset():
         self.test_augmentor =  Augmentor(True,  0.,         unif, beta, gamma, tanh, channel_pad, channel_pad_sigma)
         self.transform = T.Compose([T.ToTensor(), self.test_augmentor])
 
-        if self.dataset == 'MNIST':
+        if self.handwriting_type == 'OPERATOR':
+            print("Dataset used is operators")
+            self.dims = (28, 28)
+            if channel_pad:
+                raise ValueError('needs to be fixed, channel padding does not work with mnist')
+            self.channels = 1
+            self.n_classes = 12
+            self.label_mapping = list(range(self.n_classes))
+            self.label_augment = LabelAugmentor(self.label_mapping)
+            train_csv_path = '/home/kaushikdas/aashish/pytorch_datasets/OPERATOR/handwriting_operators_train_temp.csv'
+            test_csv_path = '/home/kaushikdas/aashish/pytorch_datasets/OPERATOR/handwriting_operators_test_temp.csv'
+
+            self.test_data = HandwritingDataset(test_csv_path, 
+                                                transform=T.Compose([T.ToTensor(), self.test_augmentor]), 
+                                                target_transform = self.label_augment)
+
+            self.train_data = HandwritingDataset(train_csv_path, 
+                                                transform=T.Compose([T.ToTensor(), self.train_augmentor]), 
+                                                target_transform = self.label_augment)
+        elif self.dataset == 'MNIST':
             self.dims = (28, 28)
             if channel_pad:
                 raise ValueError('needs to be fixed, channel padding does not work with mnist')
