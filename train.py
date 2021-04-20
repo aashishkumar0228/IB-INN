@@ -82,6 +82,7 @@ def train(args):
     log_write(header_fmt.format(*plot_columns))
 
     if resume:
+        print('loading from checkpoint: ',resume)
         inn.load(resume)
 
     t_start = time()
