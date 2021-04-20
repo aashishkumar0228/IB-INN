@@ -33,7 +33,7 @@ class GenerativeClassifier(nn.Module):
             if self.handwriting_type == 'OPERATOR':
                 self.n_classes = 12
             if self.handwriting_type == 'LETTER':
-                self.n_classes = 35
+                self.n_classes = 26
             if self.handwriting_type == 'EMNIST_LETTER':
                 self.n_classes = 26
         elif self.dataset in ['CIFAR10', 'CIFAR100']:

@@ -164,7 +164,7 @@ class Dataset():
             if channel_pad:
                 raise ValueError('needs to be fixed, channel padding does not work with mnist')
             self.channels = 1
-            self.n_classes = 35
+            self.n_classes = 26
             self.label_mapping = list(range(self.n_classes))
             self.label_augment = LabelAugmentor(self.label_mapping)
             train_csv_path = '/home/kaushikdas/aashish/pytorch_datasets/LETTER/handwriting_letters_train.csv'
