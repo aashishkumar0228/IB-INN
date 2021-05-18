@@ -36,6 +36,10 @@ class GenerativeClassifier(nn.Module):
                 self.n_classes = 26
             if self.handwriting_type == 'EMNIST_LETTER':
                 self.n_classes = 26
+            if self.handwriting_type == 'EMNIST_UPPERCASE_LETTER':
+                self.n_classes = 26
+            if self.handwriting_type == 'EMNIST_LOWERCASE_LETTER':
+                self.n_classes = 26
         elif self.dataset in ['CIFAR10', 'CIFAR100']:
             self.dims  = (3 + self.ch_pad, 32, 32)
             self.input_channels = 3 + self.ch_pad

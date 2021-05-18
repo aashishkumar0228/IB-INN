@@ -196,6 +196,44 @@ class Dataset():
             self.train_data = HandwritingDataset(train_csv_path, 
                                                 transform=T.Compose([T.ToTensor(), self.train_augmentor]), 
                                                 target_transform = self.label_augment)
+        elif self.handwriting_type == 'EMNIST_UPPERCASE_LETTER':
+            print("Dataset used is emnist uppercase letters")
+            self.dims = (28, 28)
+            if channel_pad:
+                raise ValueError('needs to be fixed, channel padding does not work with mnist')
+            self.channels = 1
+            self.n_classes = 26
+            self.label_mapping = list(range(self.n_classes))
+            self.label_augment = LabelAugmentor(self.label_mapping)
+            train_csv_path = '/home/kaushikdas/aashish/pytorch_datasets/EMNIST_UPPERCASE_LETTER/emnist_uppercase_train_4th_May_2021.csv'
+            test_csv_path = '/home/kaushikdas/aashish/pytorch_datasets/EMNIST_UPPERCASE_LETTER/emnist_uppercase_test_3rd_May_2021.csv'
+
+            self.test_data = HandwritingDataset(test_csv_path, 
+                                                transform=T.Compose([T.ToTensor(), self.test_augmentor]), 
+                                                target_transform = self.label_augment)
+
+            self.train_data = HandwritingDataset(train_csv_path, 
+                                                transform=T.Compose([T.ToTensor(), self.train_augmentor]), 
+                                                target_transform = self.label_augment)
+        elif self.handwriting_type == 'EMNIST_LOWERCASE_LETTER':
+            print("Dataset used is emnist lowercase letters")
+            self.dims = (28, 28)
+            if channel_pad:
+                raise ValueError('needs to be fixed, channel padding does not work with mnist')
+            self.channels = 1
+            self.n_classes = 26
+            self.label_mapping = list(range(self.n_classes))
+            self.label_augment = LabelAugmentor(self.label_mapping)
+            train_csv_path = '/home/kaushikdas/aashish/pytorch_datasets/EMNIST_LOWERCASE_LETTER/emnist_lowercase_train_13th_May.csv'
+            test_csv_path = '/home/kaushikdas/aashish/pytorch_datasets/EMNIST_LOWERCASE_LETTER/emnist_lowercase_test_13th_May.csv'
+
+            self.test_data = HandwritingDataset(test_csv_path, 
+                                                transform=T.Compose([T.ToTensor(), self.test_augmentor]), 
+                                                target_transform = self.label_augment)
+
+            self.train_data = HandwritingDataset(train_csv_path, 
+                                                transform=T.Compose([T.ToTensor(), self.train_augmentor]), 
+                                                target_transform = self.label_augment)
         elif self.dataset == 'MNIST':
             self.dims = (28, 28)
             if channel_pad:
